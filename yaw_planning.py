@@ -138,17 +138,7 @@ def f2_x(alpha, beta, gamma, a0, w0, theta0, traj, gate_x, gate_y):
             res += 0
         else:
             # res += (sin(theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - acos(dx / ds)) ** 2) * 100 * i
-            res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - asin(dy / ds)) ** 2 * i
-        # if dx == 0 and dy == 0:
-        #     dx = (gate_x - traj.p_x[i - 1])
-        #     dy = (gate_y - traj.p_y[i - 1])
-        #     res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - pi / 2) ** 2
-        # elif dx == 0 and dy > 0:
-        #     res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - pi / 2) ** 2
-        # elif dx == 0 and dy < 0:
-        #     res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) + pi / 2) ** 2
-        # else:
-        #     res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - atan(dy / dx)) ** 2
+            res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - asin(dy / ds)) ** 2 * (i ** 2)
     return res
 
         
@@ -269,11 +259,6 @@ def plot_yaw(alpha, beta, gamma, a0, w0, theta0, traj, gate):
     plt.plot(map_x, map_y)
     plt.scatter(gate.x, gate.y, color = 'r', s = 100)
     plt.title("MAP")
-
-    plt.show()
-
-    print(pi)
-    print(y_axis[-1])
 
 # Trajectory
 # def x_pos(t):

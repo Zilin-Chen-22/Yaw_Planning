@@ -15,15 +15,15 @@ class Gate:
         self.edge_2_y = self.y - self.size / 2 * math.sin(self.angle)
 
 class Traj:
-    passGateTime = []
-    switchTime = []
-
+    
     def __init__(self, time, p_x, p_y, p_z, gates):
         self.time = time
         self.p_x = p_x
         self.p_y = p_y
         self.p_z = p_z
         self.gates = gates
+        self.passGateTime = []
+        self.switchTime = []
 
         gates_count = 0
 
@@ -47,13 +47,15 @@ class Traj:
                   ((l2x1 - l1x1) * (l1y2 - l1y1) - (l2y1 - l1y1) * (l1x2 - l1x1)) *
                   ((l2x2 - l1x1) * (l1y2 - l1y1) - (l2y2 - l1y1) * (l1x2 - l1x1)) <= 0):
                 self.passGateTime.append(t)
-                self.switchTime.append(t - 10)
+                if gates_count != len(gates) - 1:
+                    self.switchTime.append(t - 100)
                 gates_count += 1
                 if gates_count >= len(self.gates):
                     break
-        self.switchTime.append(len(self.time) - 1)
-        if self.time[0] == 0:
-            self.time[0] = 0.0000001
+        self.passGateTime.append(len(self.time))
+        self.switchTime.append(len(self.time))
+        if 0 in self.switchTime:
+            self.switchTime.remove(0)
 
     def plot_2D(self):
         # first plot traj
