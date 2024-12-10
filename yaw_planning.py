@@ -49,13 +49,13 @@ def p2p_plan(w0, theta0, traj, gate):
     if dx == 0 and dy == 0:
         dx = (gate.x - traj.p_x[-2])
         dy = (gate.y - traj.p_y[-2])
-        last_target = atan(dy / dx)
+        last_target = atan2(dy, dx)
     elif dx == 0 and dy > 0:
         last_target = pi / 2
     elif dx == 0 and dy < 0:
         last_target = - pi / 2
     else:
-        last_target = atan(dy / dx)
+        last_target = atan2(dy, dx)
     opti.subject_to(theta(alpha, beta, gamma, a0, w0, theta0, T) == last_target)
 
     opti.solver('ipopt')
@@ -96,8 +96,14 @@ def gates_plan(w0, theta0, traj, gate):
 
     # dx = (gate.x - traj.p_x[-1])
     # dy = (gate.y - traj.p_y[-1])
-    # ds = sqrt(dx ** 2 + dy ** 2)
-    # last_target = asin(dy / ds)
+    # if dx != 0 and dy != 0:
+    #     last_target = atan2(dy, dx)
+    # elif dx == 0 and dy != 0:
+    #     last_target = pi * dy / abs(dy)
+    # else:
+    #     dx = (gate.x - traj.p_x[-2])
+    #     dy = (gate.y - traj.p_y[-2])
+    #     last_target = atan2(dy, dx)
     # opti.subject_to(theta(alpha, beta, gamma, a0, w0, theta0, T) == last_target)
 
     opti.solver('ipopt')
@@ -123,7 +129,7 @@ def f1_x(alpha, beta, gamma, a0, w0, theta0, traj, gate_x, gate_y):
         elif dx == 0 and dy < 0:
             res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) + pi / 2) ** 2
         else:
-            res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - atan(dy / dx)) ** 2
+            res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - atan2(dy, dx)) ** 2
     return res
 
 def f2_x(alpha, beta, gamma, a0, w0, theta0, traj, gate_x, gate_y):
@@ -133,12 +139,16 @@ def f2_x(alpha, beta, gamma, a0, w0, theta0, traj, gate_x, gate_y):
     for i in range(MAX_TIME_ROUNDS):
         dx = (gate_x - traj.p_x[i])
         dy = (gate_y - traj.p_y[i])
-        ds = sqrt(dx ** 2 + dy ** 2)
-        if ds == 0:
-            res += 0
+        if dx == 0 and dy == 0:
+            dx = (gate_x - traj.p_x[i - 1])
+            dy = (gate_y - traj.p_y[i - 1])
+            res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - pi / 2) ** 2
+        elif dx == 0 and dy > 0:
+            res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) + pi / 2) ** 2
+        elif dx == 0 and dy < 0:
+            res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - pi / 2) ** 2
         else:
-            # res += (sin(theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - acos(dx / ds)) ** 2) * 100 * i
-            res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - asin(dy / ds)) ** 2 * (i ** 2)
+            res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - atan2(dy, dx)) ** 2
     return res
 
         
@@ -259,16 +269,3 @@ def plot_yaw(alpha, beta, gamma, a0, w0, theta0, traj, gate):
     plt.plot(map_x, map_y)
     plt.scatter(gate.x, gate.y, color = 'r', s = 100)
     plt.title("MAP")
-
-# Trajectory
-# def x_pos(t):
-#     if t < 0.125:
-#         return 0
-#     else:
-#         return 4 - 4 * cos((t - 0.125) * 2)
-
-# def y_pos(t):
-#     if t < 0.125:
-#         return t / 8
-#     else:
-#         return 4 * sin((t - 0.125) * 2) + 1
