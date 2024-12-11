@@ -5,9 +5,9 @@ Yaw planning python file for ADR in FSC
 Using CasADi as a nonlinear optimization solver
 
 ## Version
-latest upload: 12/09/2024, original python file in `yaw_planning.py`, test file in `testfile.py`
+latest upload: 12/10/2024, original python file in `yaw_planning.py`, test file in `testfile.py`
 
-test file: for generating a figure to visualise the planner
+test file: for generating a figure to visualise the planner and human-pilot flying data
 
 ## Changes
 `11/09/2024`: first version uploaded
