@@ -136,19 +136,24 @@ def f2_x(alpha, beta, gamma, a0, w0, theta0, traj, gate_x, gate_y):
     # MAX_TIME_ROUNDS = len(traj.time)
 
     res = 0
+    target_theta_with_SP = []
     for i in range(MAX_TIME_ROUNDS):
         dx = (gate_x - traj.p_x[i])
         dy = (gate_y - traj.p_y[i])
-        if dx == 0 and dy == 0:
-            dx = (gate_x - traj.p_x[i - 1])
-            dy = (gate_y - traj.p_y[i - 1])
-            res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - pi / 2) ** 2
-        elif dx == 0 and dy > 0:
-            res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) + pi / 2) ** 2
-        elif dx == 0 and dy < 0:
-            res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - pi / 2) ** 2
+        if dx != 0 and dy != 0:
+            target_theta_with_SP.append(atan2(dy, dx) * 180 / pi)
+        elif dx == 0 and dy != 0:
+            target_theta_with_SP.append(90 * dy / abs(dy))
         else:
-            res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - atan2(dy, dx)) ** 2
+            target_theta_with_SP.append(target_theta_with_SP[-1])
+        if i >= 2:
+            if target_theta_with_SP[-1] - target_theta_with_SP[-2] > 180:
+                target_theta_with_SP[-1] -= 360
+            elif target_theta_with_SP[-1] - target_theta_with_SP[-2] < -180:
+                target_theta_with_SP[-1] += 360
+
+    for i in range(MAX_TIME_ROUNDS):
+        res += (theta(alpha, beta, gamma, a0, w0, theta0, traj.time[i]) - target_theta_with_SP[i] * pi / 180) ** 2
     return res
 
         

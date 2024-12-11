@@ -164,7 +164,7 @@ for i in range(len(traj.gates)):
 
 arrow_lenth = 1
 
-for i in range(0, len(human), 50):
+for i in range(0, len(human), 25):
     arrow_x = [traj_x[i], traj_x[i] + arrow_lenth * math.cos(human[i] * math.pi / 180)]
     arrow_y = [traj_y[i], traj_y[i] + arrow_lenth * math.sin(human[i] * math.pi / 180)]
     plt.plot(arrow_x, arrow_y, color = 'b', lw = 1) 
@@ -174,9 +174,9 @@ for i in range(0, len(human), 50):
         arrow_y = [traj_y[i], traj_y[i] + arrow_lenth * math.sin(planned_theta[i] * math.pi / 180)]
         plt.plot(arrow_x, arrow_y, color = 'r', lw = 1) 
         plt.annotate('', xy = (arrow_x[1], arrow_y[1]), xytext = (arrow_x[0], arrow_y[0]), arrowprops = dict(arrowstyle = '->', lw = 2, color = 'r'))
-        arrow_x = [traj_x[i], traj_x[i] + arrow_lenth * math.cos(target_theta_with_SP[i] * math.pi / 180)]
-        arrow_y = [traj_y[i], traj_y[i] + arrow_lenth * math.sin(target_theta_with_SP[i] * math.pi / 180)]
-        plt.plot(arrow_x, arrow_y, color = 'k', lw = 1) 
-        plt.annotate('', xy = (arrow_x[1], arrow_y[1]), xytext = (arrow_x[0], arrow_y[0]), arrowprops = dict(arrowstyle = '->', lw = 2, color = 'k'))
+        # arrow_x = [traj_x[i], traj_x[i] + arrow_lenth * math.cos(target_theta_with_SP[i] * math.pi / 180)]
+        # arrow_y = [traj_y[i], traj_y[i] + arrow_lenth * math.sin(target_theta_with_SP[i] * math.pi / 180)]
+        # plt.plot(arrow_x, arrow_y, color = 'k', lw = 1) 
+        # plt.annotate('', xy = (arrow_x[1], arrow_y[1]), xytext = (arrow_x[0], arrow_y[0]), arrowprops = dict(arrowstyle = '->', lw = 2, color = 'k'))
 
 plt.show()
