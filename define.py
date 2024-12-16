@@ -70,3 +70,23 @@ class Traj:
         for i in self.passGateTime:
             plt.scatter(self.p_x[i], self.p_y[i], color = 'r', s = 100)
         plt.show()
+
+class HUMAN_TRAJ:
+    def __init__(self, data_set):
+        self.timestamp = data_set[0]
+        self.px = data_set[1]
+        self.py = data_set[2]
+        self.pz = data_set[3]
+        self.qw = data_set[4]
+        self.qx = data_set[5]
+        self.qy = data_set[6]
+        self.qz = data_set[7]
+        self.gates_passed = data_set[8]
+
+    def plot_2D(self):
+        active_figures = plt.get_fignums()
+
+        plt.figure(len(active_figures) + 1)
+
+        plt.plot(self.px, self.py)
+        plt.title("MAP")

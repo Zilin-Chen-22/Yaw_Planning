@@ -1,4 +1,5 @@
 import csv
+from define import *
 
 def read_csv_columns():
     res = [[],[],[],[],[],[],[]]
@@ -10,8 +11,24 @@ def read_csv_columns():
             if len(row) >= 3:
                 for i in range(7):
                     res[i].append(float(row[i]))
-                # col1.append(float(row[0]))
-                # col2.append(float(row[1]))
-                # col3.append(float(row[2]))
 
     return res
+
+def read_human_csv(name_of_csv):  
+    number_of_viriables = 9
+
+    data = []
+
+    for i in range(number_of_viriables):
+        data.append([])
+    
+    with open(name_of_csv, 'r', encoding='utf-8') as csvfile:
+        reader = csv.reader(csvfile)
+
+        next(reader)    # to skip the first line
+
+        for row in reader:
+            for variables in range(number_of_viriables):
+                data[variables].append(float(row[variables]))
+
+    return HUMAN_TRAJ(data)
